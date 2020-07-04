@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas的background-size: cover算法</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* .bg {
+      width: 100%;
+      height: 100vh;
+      width: 900px;
+      height: 900px;
+      background-image: url("./images/starry-sky.jpg");
+      background-size: cover;
+    } */
+  </style>
+</head>
+<body>
+  <div class="bg">
+    <canvas id="canvas"></canvas>
+  </div>
+</body>
+<script>
+  function canvasImageCoverPosition(imgNaturalWidth, imgNaturalHeight, canvasWidth, canvasHeight, offsetLeft, offsetTop) {
+    let A1, A2, A3, B1, B2, B3, dA, dB
+    offsetLeft = offsetLeft || 0.5
+    offsetTop = offsetTop || 0.5
+    A1 = imgNaturalWidth
+    A2 = canvasWidth
+    dA = A2 - A1
+    B1 = imgNaturalHeight
+    B2 = canvasHeight
+    dB = B2 - B1
+    if (dA < dB) {
+      B3 = B2
+      A3 = A1 + (A1 * ((dB * 100) / B1)) / 100
+    }
+    else {
+      A3 = A2
+      B3 = B1 + (B1 * ((dA * 100) / A1)) / 100
+    }
+    return {
+      width: A3,
+      height: B3,
+      offsetLeft: round((A2 - A3) * offsetLeft),
+      offsetTop: round((B2 - B3) * offsetTop)
+    }
+    function round(v) {
+      return (+(v >= 0) || -1) * Math.round(Math.abs(v))
+    }
+  }
+
+  // 改进版
+  function canvasImageCoverPosition(contentWidth, contentHeight, containerWidth, containerHeight, offsetLeft, offsetTop) {
+    // 源图w/h
+    const contentRatio = contentWidth / contentHeight
+    // 容器(canvas)w/h
+    const containerRatio = containerWidth / containerHeight
+
+    let resultHeight
+    let resultWidth
+
+    if (contentRatio > containerRatio) {
+      // 如果不处理, w要压缩
+      resultHeight = containerHeight
+      resultWidth = containerHeight * contentRatio
+    } else {
+      // 如果不处理, h要压缩
+      resultWidth = containerWidth
+      resultHeight = containerWidth / contentRatio
+    }
+    return {
+      width: resultWidth,
+      height: resultHeight,
+    }
+  }
+
+  const canvas = document.getElementById('canvas')
+  const context = canvas.getContext('2d')
+
+  const backgroundCanvas = document.createElement('canvas')
+  const backgroundContext = backgroundCanvas.getContext('2d')
+
+  const backgroundImage = new Image()
+  backgroundImage.src = './images/starry-sky.jpg'
+
+  backgroundImage.onload = () => {
+
+    const sourceWidth = backgroundImage.width
+    const sourceHeight = backgroundImage.height
+
+    // canvas.width = window.innerWidth > backgroundImage.width ? window.innerWidth : sourceWidth
+    // canvas.height = window.innerHeight > backgroundImage.height ? window.innerHeight : sourceHeight
+
+    canvas.width = 900
+    canvas.height = 900
+
+    backgroundCanvas.width = canvas.width
+    backgroundCanvas.height = canvas.height
+
+    // backgroundContext.drawImage(
+    //   backgroundImage,
+    //   0,
+    //   0,
+    //   sourceWidth,
+    //   sourceHeight,
+    //   0,
+    //   0,
+    //   backgroundCanvas.width,
+    //   backgroundCanvas.height
+    // )
+
+    const imagePosition = canvasImageCoverPosition(
+      sourceWidth,
+      sourceHeight,
+      canvas.width,
+      canvas.height,
+      0,
+      0
+    )
+
+    backgroundContext.drawImage(
+      backgroundImage,
+      0,
+      0,
+      imagePosition.width,
+      imagePosition.height
+    )
+
+    const pattern = context.createPattern(backgroundCanvas, 'no-repeat')
+    context.fillStyle = pattern
+    context.fillRect(0, 0, canvas.width, canvas.height)
+  }
+
+</script>
+</html>

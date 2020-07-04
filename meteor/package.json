@@ -1,0 +1,19 @@
+{
+  "name": "meteor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "worker.js",
+  "scripts": {
+    "dev": "node bin/www"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "koa-nunjucks-2": "^3.0.2",
+    "koa-router": "^9.1.0",
+    "koa-static": "^5.0.0",
+    "koa2": "^2.0.0-alpha.7",
+    "send": "^0.17.1"
+  }
+}
