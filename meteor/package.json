@@ -4,16 +4,23 @@
   "description": "",
   "main": "worker.js",
   "scripts": {
-    "dev": "node bin/www"
+    "dev": "cross-env NODE_ENV=development node bin/dev",
+    "build": "cross-env NODE_ENV=production node bin/www"
   },
   "keywords": [],
-  "author": "",
+  "author": "kallsave",
   "license": "ISC",
   "dependencies": {
     "koa-nunjucks-2": "^3.0.2",
     "koa-router": "^9.1.0",
     "koa-static": "^5.0.0",
-    "koa2": "^2.0.0-alpha.7",
-    "send": "^0.17.1"
+    "koa2": "^2.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.10",
+    "cross-env": "^7.0.2",
+    "gulp": "^4.0.2",
+    "gulp-nodemon": "^2.5.0",
+    "nodemon": "^2.0.4"
   }
 }

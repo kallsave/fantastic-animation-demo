@@ -3,6 +3,8 @@ const Koa = require('koa2')
 const static = require('koa-static')
 const nunjucks = require('koa-nunjucks-2')
 
+const indexRouter = require('./router/index')
+
 const app = new Koa()
 
 app.use(static(path.resolve(__dirname, 'public'), {
@@ -17,8 +19,6 @@ app.use(nunjucks({
     trimBlocks: true
   }
 }))
-
-const indexRouter = require('./router/index')
 
 app.use(indexRouter.routes(), indexRouter.allowedMethods())
 

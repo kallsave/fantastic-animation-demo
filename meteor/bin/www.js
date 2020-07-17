@@ -1,12 +1,11 @@
-const app = require('../app')
 const http = require('http')
-
-const port = process.env.PORT || '4006'
+const { HOST, PORT } = require('../config/index')
+const app = require('../app')
 
 const server = http.createServer(app.callback())
 
-server.listen(port)
+server.listen(PORT)
 
 server.on('listening', () => {
-  console.log('listening: localhost:4006')
+  console.log(`listening: ${HOST}${PORT}`)
 })
